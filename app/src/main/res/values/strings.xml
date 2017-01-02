@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">UNEFA APP</string>
+    <string name="title_activity_inicio_s">InicioS</string>
+    <string name="title_activity_splash">Splash</string>
+    <string name="title_activity_new_user">NewUser</string>
+    <string name="title_activity_typo_user">TypoUser</string>
+</resources>

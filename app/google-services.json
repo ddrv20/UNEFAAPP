@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "260490075414",
+    "project_id": "unefa-app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260490075414:android:1475d40f5e133fd4",
+        "android_client_info": {
+          "package_name": "unefa.app.david.com.unefaapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4odVymn71tu9WnlnBg8MxZR6P8nDTiZA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-88056164-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
