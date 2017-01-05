@@ -1,9 +1,11 @@
-package unefa.app.david.com.unefaapp;
+package unefa.app.david.com.unefaapp.Activities;
 
 import android.os.Bundle;
 import android.app.Activity;
 
-public class TypoUser extends Activity {
+import unefa.app.david.com.unefaapp.R;
+
+public class TypoUserActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

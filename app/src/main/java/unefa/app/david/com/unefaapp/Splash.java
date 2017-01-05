@@ -9,6 +9,8 @@ import android.view.Window;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import unefa.app.david.com.unefaapp.Activities.NewUserActivity;
+
 public class Splash extends Activity {
 
 
@@ -31,7 +33,7 @@ public class Splash extends Activity {
                 public void run() {
 
                     // Start the next activity
-                    Intent mainIntent = new Intent().setClass(Splash.this, NewUser.class);
+                    Intent mainIntent = new Intent().setClass(Splash.this, NewUserActivity.class);
                     startActivity(mainIntent);
 
                     // Close the activity so the user won't able to go back this

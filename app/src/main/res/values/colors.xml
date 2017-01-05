@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- COLORS FOR DIALOGS -->
+    <color name="colorNegativeDialog">#9e1515</color>
+    <color name="colorPositiveDialog">#159e15</color>
+
 </resources>

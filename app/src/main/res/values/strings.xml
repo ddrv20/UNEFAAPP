@@ -1,7 +1,15 @@
 <resources>
-    <string name="app_name">UNEFA APP</string>
+    <string name="app_name">UNEFAPP</string>
     <string name="title_activity_inicio_s">InicioS</string>
     <string name="title_activity_splash">Splash</string>
     <string name="title_activity_new_user">NewUser</string>
     <string name="title_activity_typo_user">TypoUser</string>
+
+
+    <string-array name="typo_user_array">
+        <item>Profesores</item>
+        <item>Estudiantes</item>
+    </string-array>
+
+
 </resources>

@@ -1,4 +1,4 @@
-package unefa.app.david.com.unefaapp;
+package unefa.app.david.com.unefaapp.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -20,7 +21,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
+import unefa.app.david.com.unefaapp.Custom.Dialogs;
+import unefa.app.david.com.unefaapp.R;
+
+public class NewUserActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -28,6 +32,8 @@ public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConn
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
+
+    Dialogs dialog;
 
 
     @Override
@@ -37,6 +43,8 @@ public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConn
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        dialog = new Dialogs(this);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.button2).setOnClickListener(this);
@@ -62,7 +70,7 @@ public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConn
                 signIn();
                 break;
             case R.id.button2:
-                Intent mainIntent = new Intent().setClass(NewUser.this, TypoUser.class);
+                Intent mainIntent = new Intent().setClass(NewUserActivity.this, TypoUserActivity.class);
                 startActivity(mainIntent);
                 break;
         }
@@ -89,6 +97,7 @@ public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConn
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+
             //   mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             updateUI(true);
         } else {
@@ -98,13 +107,41 @@ public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConn
     }
 
     private void updateUI(boolean signedIn) {
+        dialog.dismiss();
         if (signedIn) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+
             //  findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
             //  mStatusTextView.setText(R.string.signed_out);
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+
+            dialog.show();
+
+            dialog.image.setImageDrawable(getResources().getDrawable(R.drawable.students));
+
+            dialog.title.setText("Escoja tipo de usuario");
+            dialog.description.setVisibility(View.GONE);
+            dialog.layoutProgress.setVisibility(View.GONE);
+
+            dialog.spinnerTypoUser.setVisibility(View.VISIBLE);
+
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(NewUserActivity.this,
+                    R.array.typo_user_array, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dialog.spinnerTypoUser.setAdapter(adapter);
+
+            dialog.layoutButtons.setVisibility(View.VISIBLE);
+            dialog.layoutButtonNegative.setVisibility(View.GONE);
+            dialog.layoutAux.setVisibility(View.GONE);
+            dialog.positiveText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent mainIntent = new Intent().setClass(NewUserActivity.this, TypoUserActivity.class);
+                    startActivity(mainIntent);
+                }
+            });
             //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
@@ -112,13 +149,24 @@ public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConn
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        final TimerTask task = new TimerTask() {
+        /*dialog.show();
+
+        dialog.image.setImageDrawable(getResources().getDrawable(R.drawable.students));
+
+        dialog.title.setText("Iniciando Sesion");
+        dialog.description.setVisibility(View.GONE);
+        dialog.layoutProgress.setVisibility(View.VISIBLE);
+        dialog.progressText.setText("Cargando!!!");*/
+
+        /*final TimerTask task = new TimerTask() {
             @Override
             public void run() {
 
                 // Start the next activity
-                Intent mainIntent = new Intent().setClass(NewUser.this, TypoUser.class);
-                startActivity(mainIntent);
+                //dialog.dismiss();
+
+
+                //
 
                 // Close the activity so the user won't able to go back this
                 // activity pressing Back button
@@ -126,7 +174,7 @@ public class NewUser extends AppCompatActivity implements GoogleApiClient.OnConn
             }
         };
         Timer timer = new Timer();
-        timer.schedule(task, RC_SIGN_IN);
+        timer.schedule(task, RC_SIGN_IN);*/
 
     }
 }
