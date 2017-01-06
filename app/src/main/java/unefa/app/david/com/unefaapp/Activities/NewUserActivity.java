@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,13 +19,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import unefa.app.david.com.unefaapp.Custom.Dialogs;
 import unefa.app.david.com.unefaapp.R;
 
-public class NewUserActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
+public class NewUserActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, View.OnClickListener{
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -58,7 +56,6 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
 
 
     }
@@ -111,12 +108,6 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
         if (signedIn) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
 
-            //  findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-        } else {
-            //  mStatusTextView.setText(R.string.signed_out);
-
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-
             dialog.show();
 
             dialog.image.setImageDrawable(getResources().getDrawable(R.drawable.students));
@@ -142,6 +133,14 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
                     startActivity(mainIntent);
                 }
             });
+
+            //  findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+        } else {
+            //  mStatusTextView.setText(R.string.signed_out);
+
+            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+
+
             //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
@@ -149,14 +148,14 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        /*dialog.show();
+        dialog.show();
 
         dialog.image.setImageDrawable(getResources().getDrawable(R.drawable.students));
 
         dialog.title.setText("Iniciando Sesion");
         dialog.description.setVisibility(View.GONE);
         dialog.layoutProgress.setVisibility(View.VISIBLE);
-        dialog.progressText.setText("Cargando!!!");*/
+        dialog.progressText.setText("Cargando!!!");
 
         /*final TimerTask task = new TimerTask() {
             @Override
@@ -176,5 +175,17 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
         Timer timer = new Timer();
         timer.schedule(task, RC_SIGN_IN);*/
 
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+            Intent mainIntent = new Intent().setClass(NewUserActivity.this, TypoUserActivity.class);
+            startActivity(mainIntent);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+        updateUI(false);
     }
 }
