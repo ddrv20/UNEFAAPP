@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -18,14 +20,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import unefa.app.david.com.unefaapp.Custom.Dialogs;
 import unefa.app.david.com.unefaapp.R;
 
-public class NewUserActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
+public class NewUserActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, View.OnClickListener{
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -128,6 +130,20 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
 
     private boolean userIsNew(String email){
 
+        JsonObject json = new JsonObject();
+        json.addProperty("email", email);
+
+        Ion.with(getApplicationContext())
+                .load("http://192.168.0.109:8000/usertwo/")
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        Toast.makeText(getApplicationContext(), result.get("email").getAsString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
         return true;
     }
 
@@ -137,7 +153,9 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
 
-            if (getUserEmail().equals("") && userIsNew(acct.getEmail())){
+            userIsNew(acct.getEmail());
+
+            /*if (getUserEmail().equals("") && userIsNew(acct.getEmail())){
 
                 dialog.show();
 
@@ -178,7 +196,7 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
                         "");
                 Intent mainIntent = new Intent().setClass(NewUserActivity.this, TypoUserActivity.class);
                 startActivity(mainIntent);
-            }
+            }*/
 
             //  findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
@@ -221,5 +239,17 @@ public class NewUserActivity extends AppCompatActivity implements GoogleApiClien
         Timer timer = new Timer();
         timer.schedule(task, RC_SIGN_IN);*/
 
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+            Intent mainIntent = new Intent().setClass(NewUserActivity.this, TypoUserActivity.class);
+            startActivity(mainIntent);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+        updateUI(false);
     }
 }
